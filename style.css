@@ -1,0 +1,337 @@
+/* --- CSS VARIABLES FOR THEMING --- */
+:root {
+    /* Light Theme (Default) */
+    --bg-body: #f0f2f5;
+    --bg-app: #ffffff;
+    --bg-sidebar: #fdfdfd;
+    --text-main: #333333;
+    --text-muted: #666666;
+    --border-color: #dcdee0;
+    
+    --nav-bg: #333333;
+    --nav-text: #cccccc;
+    
+    --key-bg-num: #ffffff;
+    --key-bg-light: #f7f7f7;
+    --key-bg-dark: #dcdcdc;
+    --key-text: #333333;
+    
+    --primary-blue: #2962ff;
+    --accent-operator: #f1a33c;
+    --accent-action: #a5a5a5;
+    
+    --simple-calc-bg: #333333;
+    --simple-display-bg: #aab;
+}
+
+/* Dark Theme Overrides */
+[data-theme="dark"] {
+    --bg-body: #121212;
+    --bg-app: #1e1e1e;
+    --bg-sidebar: #252526;
+    --text-main: #e0e0e0;
+    --text-muted: #a0a0a0;
+    --border-color: #3e3e3e;
+
+    --nav-bg: #000000;
+    --nav-text: #aaaaaa;
+
+    --key-bg-num: #3e3e3e;
+    --key-bg-light: #2d2d2d;
+    --key-bg-dark: #505050;
+    --key-text: #ffffff;
+
+    --simple-calc-bg: #000000;
+    --simple-display-bg: #c9c9ff;
+}
+
+body { 
+    margin: 0; padding: 0; 
+    font-family: 'Helvetica Neue', Arial, sans-serif; 
+    overflow: hidden; height: 100vh; 
+    display: flex; flex-direction: column; 
+    background: var(--bg-body); 
+    color: var(--text-main);
+    transition: background 0.3s, color 0.3s;
+}
+
+/* --- Navigation Bar --- */
+.mode-nav {
+    height: 50px;
+    background: var(--nav-bg);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    z-index: 100;
+}
+.nav-brand { color: white; font-weight: bold; font-size: 1.1rem; }
+.center-toggles { display: flex; gap: 10px; }
+.mode-btn {
+    background: #555; border: none; color: #ccc;
+    padding: 6px 15px; border-radius: 20px;
+    cursor: pointer; font-size: 0.9rem; transition: 0.3s;
+}
+.mode-btn:hover { color: white; background: #666; }
+.mode-btn.active {
+    background: var(--primary-blue);
+    color: white;
+    font-weight: bold;
+    box-shadow: 0 0 10px rgba(41, 98, 255, 0.4);
+}
+.theme-btn {
+    background: transparent; border: 1px solid #666; color: white;
+    width: 35px; height: 35px; border-radius: 50%;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: 0.3s;
+}
+.theme-btn:hover { background: rgba(255,255,255,0.1); border-color: white; }
+
+/* --- Layout --- */
+.app-view { width: 100%; height: calc(100vh - 50px); display: flex; flex-direction: column; }
+.hidden-view { display: none !important; }
+.app-container { display: flex; flex-grow: 1; height: calc(100vh - 270px); }
+
+/* Sidebar */
+.sidebar {
+    width: 300px;
+    background: var(--bg-sidebar);
+    border-right: 1px solid var(--border-color);
+    display: flex; flex-direction: column;
+    padding: 10px;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+    z-index: 10;
+}
+.header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid var(--border-color); }
+.header h2 { color: var(--text-main); font-size: 1.2rem; margin: 0; }
+.clear-all-btn { background: none; border: none; color: var(--text-muted); cursor: pointer; }
+
+/* Equation List */
+/* ... keep previous styles ... */
+
+/* UPDATED: Equation List Styling */
+.expression-row {
+    display: flex; 
+    align-items: flex-start; /* Align to top */
+    margin-bottom: 5px;
+    background: var(--bg-app); 
+    border: 1px solid var(--border-color); 
+    border-radius: 4px; 
+    padding: 8px 5px;
+    border-left: 5px solid #ccc;
+    transition: box-shadow 0.2s;
+}
+
+.expression-row:focus-within {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.color-indicator { 
+    width: 10px; height: 10px; border-radius: 50%; 
+    margin-right: 8px; margin-top: 6px; /* Align with input text */
+}
+
+/* Wrapper to stack Input and Result */
+.input-wrapper {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.expression-row input {
+    border: none; outline: none; width: 100%;
+    font-size: 1.1rem; font-family: 'Courier New', monospace;
+    background: transparent; color: var(--text-main);
+    font-weight: 500;
+}
+
+/* NEW: Result Display Styling */
+.expr-result {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-family: 'Helvetica Neue', sans-serif;
+    text-align: right;
+    margin-top: 4px;
+    padding-right: 5px;
+    min-height: 1.2em; /* Prevent jumpiness */
+    font-style: italic;
+}
+
+.remove-expr { 
+    background: none; border: none; color: var(--text-muted); 
+    cursor: pointer; margin-left: 8px; margin-top: 2px;
+}
+.remove-expr:hover { color: #d32f2f; }
+
+/* ... keep the rest ... */
+
+
+.add-expression-btn {
+    padding: 10px; border: 1px dashed var(--border-color); background: none; color: var(--text-muted);
+    border-radius: 4px; cursor: pointer; text-align: left;
+}
+.add-expression-btn:hover { background: rgba(0,0,0,0.05); }
+
+.magic-menu { margin-top: 10px; border-top: 1px solid var(--border-color); padding-top: 10px; color: var(--text-main); }
+.magic-menu select { width: 100%; padding: 5px; margin-top: 5px; background: var(--bg-app); color: var(--text-main); border: 1px solid var(--border-color); }
+
+/* Graph Area */
+.main-content { flex-grow: 1; position: relative; background: var(--bg-app); }
+#graph-container { width: 100%; height: 100%; }
+
+/* Media Controls (Screenshot/Record) */
+.media-controls {
+    position: absolute; top: 10px; left: 10px;
+    display: flex; gap: 8px;
+    background: var(--bg-app); padding: 5px; border-radius: 4px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2); border: 1px solid var(--border-color);
+}
+.media-controls button {
+    width: 36px; height: 36px; border: 1px solid var(--border-color); background: var(--bg-app);
+    font-size: 1.1rem; color: var(--text-main); cursor: pointer; border-radius: 3px;
+}
+.media-controls button:hover { background: var(--key-bg-light); color: var(--primary-blue); }
+.recording-active { color: red !important; animation: pulse 1.5s infinite; border-color: red !important; }
+
+@keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+
+/* Zoom Controls */
+.zoom-controls {
+    position: absolute; top: 10px; right: 10px;
+    display: flex; flex-direction: column; gap: 5px;
+    background: var(--bg-app); padding: 5px; border-radius: 4px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2); border: 1px solid var(--border-color);
+}
+.zoom-controls button {
+    width: 36px; height: 36px; border: 1px solid var(--border-color); background: var(--bg-app);
+    font-size: 1.2rem; color: var(--text-main); cursor: pointer; border-radius: 3px;
+}
+.zoom-controls button:hover { background: var(--key-bg-light); }
+
+/* Keypad Section */
+.keypad-container {
+    height: 220px; background: var(--bg-app); border-top: 1px solid var(--border-color);
+    position: relative; display: flex; flex-direction: column;
+}
+
+/* Function Panel */
+/* ... existing keypad styles ... */
+
+/* Function Panel (Updated for Categories) */
+.functions-panel {
+    position: absolute; 
+    bottom: 100%; 
+    left: 0; 
+    width: 100%; 
+    height: 300px; /* Increased height */
+    background: var(--bg-app); 
+    border-top: 1px solid var(--border-color); 
+    z-index: 20;
+    
+    /* Grid Layout for Categories */
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 15px;
+    padding: 20px;
+    box-shadow: 0 -5px 20px rgba(0,0,0,0.15);
+    
+    /* Scrollability */
+    overflow-y: auto;
+}
+
+.functions-panel.hidden { display: none; }
+
+/* Category Styling */
+.func-category {
+    display: flex; 
+    flex-direction: column;
+}
+
+.func-category h4 { 
+    margin: 0 0 8px 0; 
+    color: var(--primary-blue); 
+    font-size: 0.85rem; 
+    font-weight: bold;
+    text-transform: uppercase; 
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 4px;
+}
+
+/* Button Grid within Category */
+.btn-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(45px, 1fr));
+    gap: 5px;
+}
+
+.func-category button {
+    padding: 8px 4px;
+    background: var(--key-bg-light); 
+    border: 1px solid var(--border-color);
+    color: var(--text-main); 
+    border-radius: 4px; 
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-family: 'Helvetica Neue', sans-serif;
+    transition: all 0.2s;
+}
+
+.func-category button:hover { 
+    background: var(--primary-blue); 
+    color: white; 
+    border-color: var(--primary-blue);
+}
+
+/* Main Keypad Grid */
+.keypad-main {
+    display: flex; height: 100%; padding: 8px; gap: 10px; background: var(--bg-body);
+}
+
+.keys-left { flex: 1.5; display: flex; flex-direction: column; gap: 4px; }
+.keys-right { flex: 1.5; display: flex; flex-direction: column; }
+.keys-actions { flex: 0.5; display: flex; flex-direction: column; gap: 4px; }
+
+.key-row { display: flex; flex: 1; gap: 4px; }
+.num-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; height: 100%; width: 100%; }
+
+/* Button Styles - High Contrast for Dark Mode */
+button.k-light { background: var(--key-bg-light); border: 1px solid var(--border-color); color: var(--key-text); font-weight: bold; border-radius: 4px; flex: 1; cursor: pointer; font-size: 1.1rem; }
+button.k-num { background: var(--key-bg-num); border: 1px solid var(--border-color); color: var(--key-text); font-weight: bold; border-radius: 4px; cursor: pointer; font-size: 1.2rem; }
+button.k-dark { background: var(--key-bg-dark); border: 1px solid var(--border-color); color: var(--key-text); font-weight: bold; border-radius: 4px; flex: 1; cursor: pointer; font-size: 0.9rem; text-transform: uppercase;}
+button.k-ctrl { background: var(--key-bg-dark); border: 1px solid var(--border-color); border-radius: 4px; flex: 1; cursor: pointer; font-size: 1.2rem; color: var(--key-text); }
+button.k-enter { background: var(--primary-blue); border: 1px solid #1e50cb; border-radius: 4px; flex: 1; cursor: pointer; color: white; font-size: 1.5rem; }
+
+button:active { transform: translateY(1px); }
+
+/* --- Simple Calculator --- */
+.simple-calc-wrapper {
+    display: flex; justify-content: center; align-items: center;
+    height: 100%; background: var(--bg-body);
+}
+.simple-calc-body {
+    width: 320px; background: var(--simple-calc-bg); padding: 20px;
+    border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); border: 1px solid var(--border-color);
+}
+.simple-display {
+    background: var(--simple-display-bg); height: 100px; border-radius: 10px; margin-bottom: 20px;
+    padding: 10px; display: flex; flex-direction: column; justify-content: space-between;
+    text-align: right; font-family: 'Courier New', monospace; box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
+}
+.history { font-size: 0.9rem; color: #444; height: 20px; }
+#simple-input {
+    width: 100%; background: transparent; border: none; outline: none;
+    font-size: 2.5rem; text-align: right; color: #000;
+}
+.simple-keypad {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
+}
+.s-btn {
+    padding: 15px; border: none; border-radius: 50%; font-size: 1.2rem; cursor: pointer;
+    font-weight: bold; transition: 0.2s; background: #555; color: white;
+}
+.s-btn:hover { filter: brightness(1.2); }
+.s-btn.action { background: var(--accent-action); color: #000; }
+.s-btn.operator { background: var(--accent-operator); color: white; }
+.s-btn.zero-btn { grid-column: span 2; border-radius: 30px; }
+.s-btn.equals { background: var(--accent-operator); color: white; }

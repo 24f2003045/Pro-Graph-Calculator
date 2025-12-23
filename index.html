@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pro Graph Calculator</title>
+    <script src="https://cdn.plot.ly/plotly-2.24.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.8.0/math.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="mode-nav">
+        <div class="nav-brand"><i class="fas fa-layer-group"></i> CalcMaster</div>
+        
+        <div class="center-toggles">
+            <button class="mode-btn active" onclick="switchMode('graphical')" id="btn-graphical">
+                <i class="fas fa-chart-line"></i> Graph
+            </button>
+            <button class="mode-btn" onclick="switchMode('simple')" id="btn-simple">
+                <i class="fas fa-calculator"></i> Simple
+            </button>
+        </div>
+
+        <div class="theme-toggle-wrapper">
+            <button class="theme-btn" onclick="toggleTheme()" title="Toggle Dark Mode">
+                <i class="fas fa-moon" id="theme-icon"></i>
+            </button>
+        </div>
+    </div>
+
+    <div id="view-graphical" class="app-view">
+        <div class="app-container">
+            <div class="sidebar">
+                <div class="header">
+                    <h2>GraphCalc</h2>
+                    <button class="clear-all-btn" onclick="clearAll()" title="Clear All"><i class="fas fa-trash"></i></button>
+                </div>
+
+                <div id="equation-list" class="equation-list"></div>
+
+                <button class="add-expression-btn" onclick="addNewExpression()">
+                    <i class="fas fa-plus"></i> Expression
+                </button>
+
+                <div class="magic-menu">
+                    <label>✨ Magic Graphs</label>
+                    <select id="magicSelect" onchange="triggerMagic(this.value)">
+                        <option value="" disabled selected>Select a Graph...</option>
+                        <option value="1">1. The Ripple (3D)</option>
+                        <option value="2">2. Monkey Saddle (3D)</option>
+                        <option value="3">3. Egg Crate (3D)</option>
+                        <option value="4">4. Gaussian Peak (3D)</option>
+                        <option value="5">5. Interference Beats (2D)</option>
+                        <option value="6">6. Damping Wave (2D)</option>
+                        <option value="7">7. Tangent Forest (2D)</option>
+                        <option value="8">8. Modulo Art (2D)</option>
+                        <option value="9">9. Butterfly Curve (2D)</option>
+                        <option value="10">10. Heart Shape (2D)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="main-content">
+                <div id="graph-container"></div>
+                
+                <div class="media-controls">
+                    <button onclick="takeScreenshot()" title="Take Screenshot"><i class="fas fa-camera"></i></button>
+                    <button onclick="toggleRecording()" id="record-btn" title="Record Screen"><i class="fas fa-video"></i></button>
+                </div>
+
+                <div class="zoom-controls">
+                    <button onclick="resetZoom()"><i class="fas fa-home"></i></button>
+                    <button onclick="zoomIn()"><i class="fas fa-plus"></i></button>
+                    <button onclick="zoomOut()"><i class="fas fa-minus"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <div class="keypad-container">
+            <div id="functions-panel" class="functions-panel hidden">
+    
+    <div class="func-category">
+                <h4>Trigonometry</h4>
+                <div class="btn-group">
+                    <button onclick="typeKey('sin(')">sin</button>
+                    <button onclick="typeKey('cos(')">cos</button>
+                    <button onclick="typeKey('tan(')">tan</button>
+                    <button onclick="typeKey('csc(')">csc</button>
+                    <button onclick="typeKey('sec(')">sec</button>
+                    <button onclick="typeKey('cot(')">cot</button>
+                </div>
+            </div>
+
+            <div class="func-category">
+                <h4>Inverse Trig</h4>
+                <div class="btn-group">
+                    <button onclick="typeKey('asin(')">sin⁻¹</button>
+                    <button onclick="typeKey('acos(')">cos⁻¹</button>
+                    <button onclick="typeKey('atan(')">tan⁻¹</button>
+                    <button onclick="typeKey('acsc(')">csc⁻¹</button>
+                    <button onclick="typeKey('asec(')">sec⁻¹</button>
+                    <button onclick="typeKey('acot(')">cot⁻¹</button>
+                </div>
+            </div>
+
+            <div class="func-category">
+                <h4>Hyperbolic</h4>
+                <div class="btn-group">
+                    <button onclick="typeKey('sinh(')">sinh</button>
+                    <button onclick="typeKey('cosh(')">cosh</button>
+                    <button onclick="typeKey('tanh(')">tanh</button>
+                    <button onclick="typeKey('csch(')">csch</button>
+                    <button onclick="typeKey('sech(')">sech</button>
+                    <button onclick="typeKey('coth(')">coth</button>
+                </div>
+            </div>
+
+            <div class="func-category">
+                <h4>Statistics</h4>
+                <div class="btn-group">
+                    <button onclick="typeKey('mean(')">mean</button>
+                    <button onclick="typeKey('median(')">median</button>
+                    <button onclick="typeKey('min(')">min</button>
+                    <button onclick="typeKey('max(')">max</button>
+                    <button onclick="typeKey('stdev(')">stdev</button>
+                    <button onclick="typeKey('var(')">var</button>
+                    <button onclick="typeKey('mad(')">mad</button>
+                    <button onclick="typeKey('corr(')">corr</button>
+                    <button onclick="typeKey('quantile(')">quantile</button>
+                    <button onclick="typeKey('cov(')">cov</button>
+                </div>
+            </div>
+
+            <div class="func-category">
+                <h4>Inference</h4>
+                <div class="btn-group">
+                    <button onclick="typeKey('ttest(')">ttest</button>
+                    <button onclick="typeKey('ztest(')">ztest</button>
+                    <button onclick="typeKey('chisqtest(')">chisq</button>
+                    <button onclick="typeKey('p(')">p</button>
+                    <button onclick="typeKey('conf(')">conf</button>
+                    <button onclick="typeKey('stderr(')">stderr</button>
+                </div>
+            </div>
+
+            <div class="func-category">
+                <h4>Distributions</h4>
+                <div class="btn-group">
+                    <button onclick="typeKey('normaldist(')">normal</button>
+                    <button onclick="typeKey('tdist(')">tdist</button>
+                    <button onclick="typeKey('binomialdist(')">binom</button>
+                    <button onclick="typeKey('poissondist(')">poisson</button>
+                    <button onclick="typeKey('uniformdist(')">uniform</button>
+                    <button onclick="typeKey('pdf(')">pdf</button>
+                    <button onclick="typeKey('cdf(')">cdf</button>
+                    <button onclick="typeKey('random(')">random</button>
+                </div>
+            </div>
+
+            <div class="func-category">
+                <h4>Calculus</h4>
+                <div class="btn-group">
+                    <button onclick="typeKey('derivative(')">d/dx</button>
+                    <button onclick="typeKey('integral(')">∫</button>
+                    <button onclick="typeKey('sum(')">Σ</button>
+                    <button onclick="typeKey('prod(')">∏</button>
+                    <button onclick="typeKey('exp(')">exp</button>
+                    <button onclick="typeKey('ln(')">ln</button>
+                    <button onclick="typeKey('log10(')">log₁₀</button>
+                    <button onclick="typeKey('log(')">logₐ</button>
+                </div>
+            </div>
+
+            <div class="func-category">
+                <h4>List Ops</h4>
+                <div class="btn-group">
+                    <button onclick="typeKey('sort(')">sort</button>
+                    <button onclick="typeKey('unique(')">unique</button>
+                    <button onclick="typeKey('join(')">join</button>
+                    <button onclick="typeKey('shuffle(')">shuffle</button>
+                    <button onclick="typeKey('range(')">range</button>
+                </div>
+            </div>
+
+            <div class="func-category">
+                <h4>Number Th.</h4>
+                <div class="btn-group">
+                    <button onclick="typeKey('lcm(')">lcm</button>
+                    <button onclick="typeKey('gcd(')">gcd</button>
+                    <button onclick="typeKey('mod(')">mod</button>
+                    <button onclick="typeKey('ceil(')">ceil</button>
+                    <button onclick="typeKey('floor(')">floor</button>
+                    <button onclick="typeKey('round(')">round</button>
+                    <button onclick="typeKey('sign(')">sign</button>
+                    <button onclick="typeKey('combinations(')">nCr</button>
+                    <button onclick="typeKey('permutations(')">nPr</button>
+                </div>
+            </div>
+
+            <div class="func-category">
+                <h4>Misc / Geo</h4>
+                <div class="btn-group">
+                    <button onclick="typeKey('polygon(')">polygon</button>
+                    <button onclick="typeKey('distance(')">dist</button>
+                    <button onclick="typeKey('rgb(')">rgb</button>
+                    <button onclick="typeKey('hsv(')">hsv</button>
+                    <button onclick="typeKey('tone(')">tone</button>
+                </div>
+            </div>
+            
+            <div class="func-category">
+                <h4>Visuals</h4>
+                <div class="btn-group">
+                    <button onclick="typeKey('histogram(')">hist</button>
+                    <button onclick="typeKey('boxplot(')">box</button>
+                    <button onclick="typeKey('dotplot(')">dot</button>
+                </div>
+            </div>
+
+        </div>
+
+            <div class="keypad-main">
+                <div class="keys-left">
+                    <div class="key-row">
+                        <button class="k-light" onclick="typeKey('x')">x</button>
+                        <button class="k-light" onclick="typeKey('y')">y</button>
+                        <button class="k-light" onclick="typeKey('^2')">a²</button>
+                        <button class="k-light" onclick="typeKey('^')">aᵇ</button>
+                    </div>
+                    <div class="key-row">
+                        <button class="k-light" onclick="typeKey('(')">(</button>
+                        <button class="k-light" onclick="typeKey(')')">)</button>
+                        <button class="k-light" onclick="typeKey('<')"><</button>
+                        <button class="k-light" onclick="typeKey('>')">></button>
+                    </div>
+                    <div class="key-row">
+                        <button class="k-light" onclick="typeKey('abs(')">|a|</button>
+                        <button class="k-light" onclick="typeKey(',')">,</button>
+                        <button class="k-light" onclick="typeKey('<=')">≤</button>
+                        <button class="k-light" onclick="typeKey('>=')">≥</button>
+                    </div>
+                    <div class="key-row">
+                        <button class="k-dark" onclick="toggleFunctions()">functions</button>
+                        <button class="k-light" onclick="typeKey('sqrt(')">√</button>
+                        <button class="k-light" onclick="typeKey('pi')">π</button>
+                    </div>
+                </div>
+
+                <div class="keys-right">
+                    <div class="num-grid">
+                        <button class="k-num" onclick="typeKey('7')">7</button>
+                        <button class="k-num" onclick="typeKey('8')">8</button>
+                        <button class="k-num" onclick="typeKey('9')">9</button>
+                        <button class="k-light" onclick="typeKey('/')">÷</button>
+
+                        <button class="k-num" onclick="typeKey('4')">4</button>
+                        <button class="k-num" onclick="typeKey('5')">5</button>
+                        <button class="k-num" onclick="typeKey('6')">6</button>
+                        <button class="k-light" onclick="typeKey('*')">×</button>
+
+                        <button class="k-num" onclick="typeKey('1')">1</button>
+                        <button class="k-num" onclick="typeKey('2')">2</button>
+                        <button class="k-num" onclick="typeKey('3')">3</button>
+                        <button class="k-light" onclick="typeKey('-')">−</button>
+
+                        <button class="k-num" onclick="typeKey('0')">0</button>
+                        <button class="k-num" onclick="typeKey('.')">.</button>
+                        <button class="k-light" onclick="typeKey('=')">=</button>
+                        <button class="k-light" onclick="typeKey('+')">+</button>
+                    </div>
+                </div>
+
+                <div class="keys-actions">
+                    <button class="k-ctrl" onclick="backspace()"><i class="fas fa-backspace"></i></button>
+                    <button class="k-enter" onclick="evaluateAll()"><i class="fas fa-level-down-alt fa-rotate-90"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="view-simple" class="app-view hidden-view">
+        <div class="simple-calc-wrapper">
+            <div class="simple-calc-body">
+                <div class="simple-display">
+                    <div id="simple-history" class="history"></div>
+                    <input type="text" id="simple-input" placeholder="0" readonly>
+                </div>
+                <div class="simple-keypad">
+                    <button class="s-btn action" onclick="simpleClear()">AC</button>
+                    <button class="s-btn action" onclick="simpleBackspace()">⌫</button>
+                    <button class="s-btn action" onclick="simpleAppend('%')">%</button>
+                    <button class="s-btn operator" onclick="simpleAppend('/')">÷</button>
+                    
+                    <button class="s-btn" onclick="simpleAppend('7')">7</button>
+                    <button class="s-btn" onclick="simpleAppend('8')">8</button>
+                    <button class="s-btn" onclick="simpleAppend('9')">9</button>
+                    <button class="s-btn operator" onclick="simpleAppend('*')">×</button>
+                    
+                    <button class="s-btn" onclick="simpleAppend('4')">4</button>
+                    <button class="s-btn" onclick="simpleAppend('5')">5</button>
+                    <button class="s-btn" onclick="simpleAppend('6')">6</button>
+                    <button class="s-btn operator" onclick="simpleAppend('-')">−</button>
+                    
+                    <button class="s-btn" onclick="simpleAppend('1')">1</button>
+                    <button class="s-btn" onclick="simpleAppend('2')">2</button>
+                    <button class="s-btn" onclick="simpleAppend('3')">3</button>
+                    <button class="s-btn operator" onclick="simpleAppend('+')">+</button>
+                    
+                    <button class="s-btn zero-btn" onclick="simpleAppend('0')">0</button>
+                    <button class="s-btn" onclick="simpleAppend('.')">.</button>
+                    <button class="s-btn equals" onclick="simpleCalculate()">=</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
