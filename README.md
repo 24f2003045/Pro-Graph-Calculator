@@ -7,13 +7,13 @@
 Here is a look at the application in its different modes and themes.
 
 ### Graphical Mode (2D & Keypad - Light Theme)
-![Graphical Mode Light Theme](image_2.png)
+![Graphical Mode Light Theme](image_2.jpeg)
 
 ### Simple Calculator Mode (Dark Theme)
-![Simple Mode Dark Theme](image_3.png)
+![Simple Mode Dark Theme](image_3.jpeg)
 
 ### 3D Graphing Capability (Dark Theme)
-![3D Graph Example](image_4.png)
+![3D Graph Example](image_4.jpeg)
 
 ---
 
